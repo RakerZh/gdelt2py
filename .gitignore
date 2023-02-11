@@ -1,3 +1,4 @@
 *.csv
+.idea
 to_csv.py
 *.xml
