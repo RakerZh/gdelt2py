@@ -10,7 +10,7 @@ env/
 venv/
 ENV/
 *.xml
-src/*.egg-info
+src/gdelt2py.egg-info/
 .cache
 .installed.cfg
 *.egg
