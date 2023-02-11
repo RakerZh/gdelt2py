@@ -3,7 +3,7 @@ import os
 import glob
 from typing import List,Union
 
-class Analyzer():
+class Task():
     init_filter = {"V2Locations":[],"V2Themes":[]}
 
     def __init__(self,files=[], mode="date", filter_dict=init_filter,filter_optional = init_filter):
@@ -72,10 +72,3 @@ class Analyzer():
                         df_country = df_date[df_date[label].str.contains(j)]
                         df_country.to_csv(f"{name} {j}.csv",mode="a",header=False,index=False)
             os.remove(i)
-
-def process_data_with_date(data_dir):
-
-# files = glob.glob("./data/20221223*.csv")
-# an = Analyzer(files = files)
-# an.filtered_optional(themes=[],locations=["#JA#","#US#","#CG#"])
-# an.to_csv("20221223")

@@ -3,7 +3,7 @@ import glob
 import os
 import pandas as pd
 from zipfile import ZipFile
-import analyzer
+from task import Task
 import asyncio
 import time
 
@@ -42,7 +42,6 @@ async def download_and_unzip_file(url,session,date,data_dir):
         f.write(file_content)
 
         # TODO: await unzip file and processing in the same date
-
         await unzip_file(date,data_dir)
 
 async def download_and_process_files(urls,date,data_dir):
@@ -62,7 +61,7 @@ class Gdelt2():
         self.end_date = end_date
         self.themes = themes
         self.country_list = country_list
-        self.analyzer = analyzer.Analyzer()
+        self.analyzer = Task()
         self.mode = mode
         self.data_dir = data_dir
 
@@ -120,7 +119,3 @@ class Gdelt2():
 
     def download_files(self):
         asyncio.run(self.download_with_dates(self.start_date,self.end_date,self.analyzer))
-
-# gd = Gdelt2()
-# gd.download_files()
-
