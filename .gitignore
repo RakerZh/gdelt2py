@@ -10,5 +10,4 @@ env/
 venv/
 ENV/
 *.xml
-eggs/
-.eggs/
+*egg*
