@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: gdelt2py
-Version: 0.0.2
+Version: 0.0.1
 Summary: A package for gdelt2 data
 Author-email: RakerZh <gitrustz10@gmail.com>
 Project-URL: Homepage, https://github.com/RakerZh/gdelt2py

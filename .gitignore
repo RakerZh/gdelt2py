@@ -10,4 +10,7 @@ env/
 venv/
 ENV/
 *.xml
-*egg*
+src/*.egg-info
+.cache
+.installed.cfg
+*.egg
