@@ -1,4 +1,12 @@
 *.csv
 .idea
 to_csv.py
+dist/
+__pycache__/
+*.so
+.env
+.venv
+env/
+venv/
+ENV/
 *.xml

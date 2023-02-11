@@ -1,0 +1,13 @@
+LICENSE
+README.md
+pyproject.toml
+src/gdelt2py/__init__.py
+src/gdelt2py/analyzer.py
+src/gdelt2py/check.py
+src/gdelt2py/gdelt2.py
+src/gdelt2py/gdelt2evet.py
+src/gdelt2py.egg-info/PKG-INFO
+src/gdelt2py.egg-info/SOURCES.txt
+src/gdelt2py.egg-info/dependency_links.txt
+src/gdelt2py.egg-info/top_level.txt
+test/test_gdelt2.py
