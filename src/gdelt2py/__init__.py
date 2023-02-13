@@ -1,8 +1,8 @@
-__version__ = 'v0.1.0'
+__version__ = 'v0.1.2'
 
+from .gdelt2event import Gdelt2Event
 from .task import Task
 from .gdelt2 import Gdelt2
-from .gdelt2event import Gdelt2Event
 
 __title__ = 'gdelt2py'
 __author__ = 'RakerZh'

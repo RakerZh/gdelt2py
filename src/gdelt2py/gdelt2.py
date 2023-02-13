@@ -51,13 +51,15 @@ async def download_and_process_files(urls,date,data_dir):
 
 
 class Gdelt2():
-    def __init__(self, start_date="20221218", end_date="20221220", themes=None, country_list=None, data_dir="./"):
+    def __init__(self, start_date="20221218", end_date="20221220", themes=None, country_list=None,
+                 data_dir="./",gkg_data_dir="./gkg_data.csv"):
         self.start_date = start_date
         self.end_date = end_date
         self.themes = themes
         self.country_list = country_list
         self.task = Task()
         self.data_dir = data_dir
+        self.gkg_data_dir = gkg_data_dir
 
     def optional(self,themes=[],locations=[]):
         self.task.filtered(themes,locations,optional=True)
@@ -73,7 +75,7 @@ class Gdelt2():
         run Gdeltr2 download process with dates
         """
 
-        df = pd.read_csv("../../gkg_data.csv")
+        df = pd.read_csv(self.gkg_data_dir)
         df['date'] = pd.to_datetime(df['date'])
 
         start_date = pd.Timestamp(start_date)
