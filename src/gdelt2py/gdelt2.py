@@ -51,7 +51,7 @@ async def download_and_process_files(urls,date,data_dir):
 
 
 class Gdelt2():
-    def __init__(self, start_date="20221218", end_date="20221220", themes=None, country_list=None, data_dir="./data/"):
+    def __init__(self, start_date="20221218", end_date="20221220", themes=None, country_list=None, data_dir="./"):
         self.start_date = start_date
         self.end_date = end_date
         self.themes = themes
@@ -105,7 +105,7 @@ class Gdelt2():
                     new_task = self.task.copy()
                     print(new_task.mode)
                     new_task.file_list(file_list)
-                    new_task.to_csv(date_searched)
+                    new_task.to_csv(data_dir+date_searched)
 
                 res = False
 
@@ -118,10 +118,8 @@ class Gdelt2():
         file_list     = glob.glob(f"{date_searched}*.csv")
 
         new_task = self.task
-        print(len(file_list))
         new_task.file_list(file_list)
-        print(new_task.mode)
-        new_task.to_csv(date_searched)
+        new_task.to_csv(data_dir+date_searched)
 
     def download_files(self):
         asyncio.run(self.download_with_dates(self.start_date,self.end_date))

@@ -1,20 +1,11 @@
 import pandas as pd
 import copy
 import os
-import glob
 
 # https://stackoverflow.com/a/74115867
 def find_all_words(data, list_of_words,column_name):
     function = lambda row: all(word in row for word in list_of_words)
 
-    # add flags to the dataframe
-    if column_name == "V2Themes":
-        data_flags = data.loc[data[column_name].apply(function)].copy()
-        flags = [ i+"_flag" for i in list_of_words]
-        for word, flag in zip(list_of_words, flags):
-            data_flags[flag] = data_flags[column_name].str.contains(word)
-        return data_flags
-        
     return data.loc[data[column_name].apply(function)]
 
 def find_any_words(data, list_of_words,column_name):
@@ -32,6 +23,7 @@ def find_any_words(data, list_of_words,column_name):
 
 def find_one_word(data, word,column_name):
     function = lambda row: (word in row)
+
     return data.loc[data[column_name].apply(function)]
 
 class Task():
@@ -51,7 +43,7 @@ class Task():
 
     # TODO: Implement optional parameter
 
-    def filtered(self,locations=[], themes=[], optional=False):
+    def filtered(self,themes=[],locations=[],optional=False):
         index = 0
 
         if optional:
@@ -59,11 +51,10 @@ class Task():
 
         if locations != []:
             self.filter['V2Locations'][index] = locations + self.filter['V2Locations'][index]
+            self.locations_check = True
         if themes != []:
             self.filter['V2Themes'][index] = themes + self.filter['V2Themes'][index]
-
-        self.themes_check = [] != self.filter["V2Themes"][index]
-        self.locations_check = [] != self.filter["V2Locations"][index]
+            self.themes_check = True
 
         if self.themes_check and self.locations_check:
             self.mode = "both"
@@ -71,12 +62,14 @@ class Task():
             self.mode = "themes"
         elif self.locations_check:
             self.mode = "locations"
-        print(self.mode)
+        else:
+            self.mode = "default"
 
     def copy(self):
-        return copy.deepcopy(self)
+        return copy.copy(self)
 
     def to_csv(self,name):
+        pd.options.mode.chained_assignment = None
         for i in self.files:
             df = pd.read_csv(i,encoding="latin1",delimiter="\t", names=[
 "GKGRecordId",
@@ -126,24 +119,15 @@ class Task():
             if self.mode == "locations" or self.mode == "both":
                 df_out["V2Locations"] = df_out["V2Locations"].astype(str)
 
+
                 if self.filter['V2Locations'][0] != []:
                     df_out = find_all_words(df_out,self.filter["V2Locations"][0],"V2Locations")
 
                 if self.filter['V2Locations'][1] != []:
-
                     for location in self.filter['V2Locations'][1]:
                         df_country = find_one_word(df_out,location,"V2Locations")
-                        print(location,df_country.shape)
-
                         df_country.to_csv(f"{name} {location}.csv",mode="a",header=False,index=False)
                 else:
                     df_out.to_csv(f"{name}.csv",mode="a",header=False,index=False)
 
             os.remove(i)
-
-
-# files = glob.glob('data/20221201*.csv')
-# t = Task(files)
-# t.filtered(locations=[],themes=["WB_678_DIGITAL_GOVERNMENT"])
-# t.filtered(locations=["#JA#","#CG#","#AG#","#US#"],optional=True)
-# t.to_csv("test")
