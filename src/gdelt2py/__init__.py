@@ -1,4 +1,4 @@
-__version__ = 'v0.1.2'
+__version__ = 'v0.1.0'
 
 from .gdelt2event import Gdelt2Event
 from .task import Task
