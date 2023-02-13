@@ -1,13 +1,23 @@
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
 [project]
 name = "gdelt2"
-version = "0.0.1"
+version = "0.0.4"
 authors = [
   { name="RakerZh", email="gitrustz10@gmail.com" },
 ]
-description = "A package for gdelt2 data"
+
+dependencies = [
+"aiohttp==3.8.3",
+"numpy==1.24.2",
+"pandas==1.5.2",
+"pyarrow==11.0.0",
+]
+
+license = {file = "LICENSE"}
+description = "A Python package for downloading and processing Gdelt data (current only GKG, will be extened)"
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [

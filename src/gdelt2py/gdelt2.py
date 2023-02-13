@@ -5,9 +5,6 @@ import pandas as pd
 from zipfile import ZipFile
 from task import Task
 import asyncio
-import time
-
-# from .. import analyzer 
 
 async def unzip_file(filename,data_dir):
     """
@@ -16,12 +13,10 @@ async def unzip_file(filename,data_dir):
 
     with ZipFile(f"{filename}.zip") as z:
         z.extractall(f"{data_dir}")
-        # z.namelist()[0]
     os.remove(f"{filename}.zip")
     return
 
 async def download(url, session):
-
   async with session.get(url) as reponse:
         if reponse.status != 200:
             return None
@@ -38,7 +33,7 @@ async def download_and_unzip_file(url,session,date,data_dir):
         return
 
     with open(f"{date}.zip", "wb") as f:
-        print(url[37:], " file downloaded! Ready to unzip!")
+        # print(url[37:], " file downloaded! Ready to unzip!")
         f.write(file_content)
 
         # TODO: await unzip file and processing in the same date
@@ -52,26 +47,28 @@ async def download_and_process_files(urls,date,data_dir):
     async with aiohttp.ClientSession() as session:
         for url in urls:
             await download_and_unzip_file(url,session,date,data_dir)
+        return True
 
 
 class Gdelt2():
-    def __init__(self, start_date="20221120", end_date="20221220", themes=None, country_list=None,
-                 mode=None, data_dir="./data/"):
+    def __init__(self, start_date="20221218", end_date="20221220", themes=None, country_list=None, data_dir="./data/"):
         self.start_date = start_date
         self.end_date = end_date
         self.themes = themes
         self.country_list = country_list
-        self.analyzer = Task()
-        self.mode = mode
+        self.task = Task()
         self.data_dir = data_dir
 
-    def optional(self,themes,locations):
-        self.analyzer.filtered_optional(themes,locations)
+    def optional(self,themes=[],locations=[]):
+        self.task.filtered(themes,locations,optional=True)
 
-    def required(self,themes,locations):
-        self.analyzer.filtered(themes,locations)
+    def required(self,themes=[],locations=[]):
+        self.task.filtered(themes,locations)
 
-    async def download_with_dates(self,start_date,end_date,analyzer):
+    def mode(self):
+        return self.task.mode
+
+    async def download_with_dates(self,start_date,end_date):
         """
         run Gdeltr2 download process with dates
         """
@@ -87,26 +84,31 @@ class Gdelt2():
         filter = (df['date'] >= start_date) & (df['date'] <= end_date)
         df_data = df[filter]
 
-        count = 1
         urls = []
         url_date = df_data.iloc[0].at['date']
         date_searched = url_date.strftime("%Y%m%d")
         file_list = glob.glob(f"{date_searched}")
-        print(file_list)
 
+        res = False
         data_dir = self.data_dir
         for i, row in enumerate(df_data.itertuples()):
             if url_date != row[2]:
                 # download files in the same date
-                await download_and_process_files(urls,row[2],data_dir)
+                res = await download_and_process_files(urls,row[2],data_dir)
 
                 # process files in the same date
-                date_searched = url_date.strftime("%Y%m%d")
-                file_list=glob.glob(f"{data_dir}{date_searched}*.csv")
-                analyzer.file_list(file_list)
-                analyzer.to_csv()
+                if res:
+                    date_searched = url_date.strftime("%Y%m%d")
+                    file_list=glob.glob(f"{data_dir}{date_searched}*.csv")
+                    print(len(file_list))
+                    print(self.task.filter['V2Themes'])
+                    new_task = self.task.copy()
+                    print(new_task.mode)
+                    new_task.file_list(file_list)
+                    new_task.to_csv(date_searched)
 
-                count += 1
+                res = False
+
                 urls = []
 
             url_date = row[2]
@@ -114,8 +116,12 @@ class Gdelt2():
 
         date_searched = url_date.strftime("%Y%m%d")
         file_list     = glob.glob(f"{date_searched}*.csv")
-        analyzer.file_list(file_list)
-        analyzer.to_csv()
+
+        new_task = self.task
+        print(len(file_list))
+        new_task.file_list(file_list)
+        print(new_task.mode)
+        new_task.to_csv(date_searched)
 
     def download_files(self):
-        asyncio.run(self.download_with_dates(self.start_date,self.end_date,self.analyzer))
+        asyncio.run(self.download_with_dates(self.start_date,self.end_date))
