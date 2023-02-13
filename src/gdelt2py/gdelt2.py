@@ -3,7 +3,7 @@ import glob
 import os
 import pandas as pd
 from zipfile import ZipFile
-from task import Task
+from .task import Task
 import asyncio
 
 async def unzip_file(filename,data_dir):

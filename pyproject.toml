@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "gdelt2"
+name = "gdelt2py"
 version = "0.1.0"
 authors = [
   { name="RakerZh", email="gitrustz10@gmail.com" },
