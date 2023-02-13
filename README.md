@@ -2,7 +2,6 @@
 
 `gdelt2py` is package to help you download the data from gdelt2 gkg data. 
 
-
 ## Install
 
 `pip install gdelt2py`
@@ -25,14 +24,21 @@
     - The name of the output file name like "output.csv"
     - default: 'output.csv'
 
-- `out_`
+- `data_dir`:
+    - The data directory for your file downloads
+    - default: current directory
+
 
 *Note*
 - 20170725 data is missing in gdelt2.
 
 ```python
+from gdelt2 import Gdelt2
 
-df  = gdelt2py.gdelt2py(20201009,20201020,gkg,themes,files)
+t = Gdelt2()
+t.required(themes=["WB_678_DIGITAL_GOVERNMENT"])
+t.optional(locations=["#JA#","#CG#","#AG#","#US#"])
+t.download_files()
 
 ```
 
