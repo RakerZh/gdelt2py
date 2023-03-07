@@ -51,8 +51,7 @@ async def download_and_process_files(urls,date,data_dir):
 
 
 class Gdelt2():
-    def __init__(self, start_date="20221218", end_date="20221220", themes=None, country_list=None,
-                 data_dir="./",gkg_data_dir="./gkg_data.csv"):
+    def __init__(self, start_date="20221218", end_date="20221220", themes=None, country_list=None, data_dir="./",gkg_data_dir="./gkg_data.csv"):
         self.start_date = start_date
         self.end_date = end_date
         self.themes = themes
@@ -75,6 +74,8 @@ class Gdelt2():
         run Gdeltr2 download process with dates
         """
 
+        # TODO: engine options
+        # pyarrow, fastparquet, parquet
         df = pd.read_csv(self.gkg_data_dir)
         df['date'] = pd.to_datetime(df['date'])
 
@@ -108,20 +109,21 @@ class Gdelt2():
                     print(new_task.mode)
                     new_task.file_list(file_list)
                     new_task.to_csv(data_dir+date_searched)
-
+                    print(date_searched)
                 res = False
-
                 urls = []
 
             url_date = row[2]
             urls.append(row[1])
 
         date_searched = url_date.strftime("%Y%m%d")
+        print(date_searched)
         file_list     = glob.glob(f"{date_searched}*.csv")
 
         new_task = self.task
         new_task.file_list(file_list)
         new_task.to_csv(data_dir+date_searched)
+        print("Gdelt2py Done!")
 
     def download_files(self):
         asyncio.run(self.download_with_dates(self.start_date,self.end_date))

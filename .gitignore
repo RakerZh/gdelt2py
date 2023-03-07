@@ -2,6 +2,7 @@
 .idea
 to_csv.py
 dist/
+data/
 __pycache__/
 *.so
 .env

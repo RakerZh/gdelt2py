@@ -8,19 +8,39 @@
 
 ## Usage
 
+- download gkg_data.csv under your directory
+- main.py
+```txt
+.
+├── main.py
+└── gkg_data.csv
+```
+
+- in `main.py`
+
+```python
+from gdelt2py import Gdelt2
+
+t = Gdelt2()
+t.required(themes=["WB_678_DIGITAL_GOVERNMENT"])
+t.optional(locations=["#JA#","#CG#","#AG#","#US#"])
+t.download_files()
+
+```
+
 - `start_date`: 
     - The beginning date, in format with '20201020'
     - optional default: '20201020'
 
 - `end_date`: 
     - The end date, same format
-    - optional default: latestdate in gdelt2
+    - optional default: latest date in gdelt2
 
 - `themes`: 
     - Currently this package only supports gkg but will support another later.
     - default: 'gkg'
 
-- `out_file`: 
+- `out_file`:
     - The name of the output file name like "output.csv"
     - default: 'output.csv'
 
@@ -32,15 +52,7 @@
 *Note*
 - 20170725 data is missing in gdelt2.
 
-```python
-from gdelt2 import Gdelt2
 
-t = Gdelt2()
-t.required(themes=["WB_678_DIGITAL_GOVERNMENT"])
-t.optional(locations=["#JA#","#CG#","#AG#","#US#"])
-t.download_files()
-
-```
 
 ## Gdelt2 data format
 
